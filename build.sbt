@@ -14,6 +14,24 @@ remoteCacheIdCandidates := Seq(remoteCacheId.value)
 
 pushRemoteCacheConfiguration := pushRemoteCacheConfiguration.value.withOverwrite(true)
 
+Compile / TwirlKeys.compileTemplates ~= { files =>
+  val sourceInfo = "                  SOURCE: "
+  val dateInfo = "                  DATE: "
+  files.map { file =>
+    val newSrc = IO.readLines(file).map { line =>
+      if (line.startsWith(sourceInfo)) {
+        sourceInfo
+      } else if (line.startsWith(dateInfo)) {
+        dateInfo
+      } else {
+        line
+      }
+    }.mkString("\n")
+    IO.write(file, newSrc)
+    file
+  }
+}
+
 routesGenerator := {
   import play.routes.compiler.{RoutesCompiler, RoutesGenerator, Rule}
   val base = InjectedRoutesGenerator
