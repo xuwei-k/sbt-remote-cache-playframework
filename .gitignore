@@ -1,0 +1,7 @@
+remote-cache
+target
+.DS_Store
+*.class
+*.jar
+*.swp
+/logs
